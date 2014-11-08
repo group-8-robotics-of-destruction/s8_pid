@@ -2,7 +2,7 @@
 #define __PID_CONTROLLER_H
 
 namespace s8 {
-    namespace s8_pid {
+    namespace pid {
         class PIDController {
             double sum_errors;
             double prev_error;
