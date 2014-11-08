@@ -42,6 +42,14 @@ namespace s8 {
                 value += kd * (diff - prev_error) * delta_time;
                 prev_error = diff;
             }
+
+            double get_prev_error() {
+                return prev_error;
+            }
+
+            double get_sum_errors() {
+                return sum_errors;
+            }
         };
     }
 }
