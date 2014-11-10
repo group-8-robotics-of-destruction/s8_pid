@@ -6,7 +6,7 @@ namespace s8 {
         class PIDController {
             double sum_errors;
             double prev_error;
-            double delta_time;
+            int hz;
 
         public:
             //These are public so that they can be set by parameter system.
@@ -15,7 +15,7 @@ namespace s8 {
             double kd;
 
         public:
-            PIDController(int hz) : delta_time(1.0 / hz) {
+            PIDController(int hz) : hz(hz) {
                 reset();
             }
 
@@ -35,11 +35,11 @@ namespace s8 {
 
             void i_controller(double & value, double diff) {
                 value += ki * sum_errors;
-                sum_errors += diff * delta_time;
+                sum_errors += diff / hz; //Formula is diff * dt. "/ hz" is the same as "* (1.0 / hz)" and "(1.0 / hz)" = dt.
             }
 
             void d_controller(double & value, double diff) {
-                value += kd * (diff - prev_error) * delta_time;
+                value += kd * (diff - prev_error) * hz; // Formula is kd * d / dt. "* hz" is the same as "/ (1.0 / hz)" and "(1.0 / hz)" = dt.
                 prev_error = diff;
             }
 
