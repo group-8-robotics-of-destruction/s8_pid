@@ -13,6 +13,7 @@ namespace s8 {
             double kp;
             double ki;
             double kd;
+	    double i_limit;
 
         public:
             PIDController(int hz) : hz(hz) {
@@ -35,8 +36,15 @@ namespace s8 {
 
             void i_controller(double & value, double diff) {
                 value += ki * sum_errors;
+		// Formula to threshold the i component that might become too big
+		if (sum_errors > i_limit) {
+			sum_errors = i_limit;
+		}
+		else if (sum_errors < -i_limit) {
+			sum_errors = -i_limit;
+		}
                 sum_errors += diff / hz; //Formula is diff * dt. "/ hz" is the same as "* (1.0 / hz)" and "(1.0 / hz)" = dt.
-            }
+}
 
             void d_controller(double & value, double diff) {
                 value += kd * (diff - prev_error) * hz; // Formula is kd * d / dt. "* hz" is the same as "/ (1.0 / hz)" and "(1.0 / hz)" = dt.
